@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Casa de Ração Rocha – Faça seu Pedido</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Inter:wght@400;500;600&display=swap');
+
+  :root {
+    --verde: #1a7a2e;
+    --verde-escuro: #145f23;
+    --verde-claro: #e8f5e9;
+    --amarelo: #f5a800;
+    --amarelo-claro: #fff8e1;
+    --branco: #ffffff;
+    --cinza-bg: #f7f7f7;
+    --cinza-borda: #e0e0e0;
+    --cinza-texto: #555;
+    --texto: #1a1a1a;
+    --vermelho: #e53935;
+    --sombra: 0 2px 12px rgba(0,0,0,0.10);
+    --sombra-card: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--cinza-bg);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* ── HEADER ── */
+  header {
+    background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde) 100%);
+    color: white;
+    padding: 0;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 16px rgba(0,0,0,0.18);
+  }
+  .header-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    gap: 10px;
+  }
+  .logo-area { display: flex; align-items: center; gap: 10px; }
+  .logo-patas { font-size: 28px; line-height: 1; }
+  .logo-text { line-height: 1.1; }
+  .logo-text .brand { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 20px; color: var(--amarelo); text-transform: uppercase; letter-spacing: 0.5px; }
+  .logo-text .sub { font-size: 10px; color: rgba(255,255,255,0.8); font-weight: 500; text-transform: uppercase; letter-spacing: 1px; }
+  .cart-btn {
+    background: var(--amarelo);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 50px;
+    padding: 9px 18px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.15s, box-shadow 0.15s;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    white-space: nowrap;
+  }
+  .cart-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(0,0,0,0.2); }
+  .cart-count {
+    background: var(--vermelho);
+    color: white;
+    border-radius: 50%;
+    width: 20px; height: 20px;
+    font-size: 11px;
+    font-weight: 900;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* ── STEPS ── */
+  .steps-bar {
+    background: rgba(0,0,0,0.2);
+    padding: 10px 16px;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.5);
+    white-space: nowrap;
+    flex: 1;
+    justify-content: center;
+  }
+  .step.active { color: var(--amarelo); }
+  .step.done { color: rgba(255,255,255,0.8); }
+  .step-num {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    border: 2px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+  }
+  .step.active .step-num { background: var(--amarelo); color: #1a1a1a; border-color: var(--amarelo); }
+  .step.done .step-num { background: rgba(255,255,255,0.8); color: var(--verde-escuro); border-color: rgba(255,255,255,0.8); }
+  .step-sep { color: rgba(255,255,255,0.3); font-size: 10px; margin: 0 2px; }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── HERO BANNER ── */
+  .hero {
+    background: linear-gradient(135deg, var(--verde) 0%, var(--verde-escuro) 100%);
+    color: white;
+    padding: 24px 16px 20px;
+    text-align: center;
+  }
+  .hero h1 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 26px; color: var(--amarelo); line-height: 1.1; }
+  .hero p { margin-top: 6px; font-size: 13px; color: rgba(255,255,255,0.85); }
+  .hero-info { display: flex; justify-content: center; gap: 16px; margin-top: 14px; }
+  .hero-badge {
+    background: rgba(255,255,255,0.15);
+    border-radius: 8px;
+    padding: 8px 14px;
+    font-size: 11px;
+    text-align: center;
+    line-height: 1.4;
+  }
+  .hero-badge strong { display: block; font-size: 13px; color: var(--amarelo); }
+
+  /* ── CATEGORIES ── */
+  .section-title {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--verde-escuro);
+    padding: 16px 16px 10px;
+    border-bottom: 2px solid var(--amarelo);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 0;
+  }
+  .cat-scroll {
+    display: flex;
+    gap: 10px;
+    padding: 12px 16px;
+    overflow-x: auto;
+    background: white;
+    border-bottom: 1px solid var(--cinza-borda);
+  }
+  .cat-scroll::-webkit-scrollbar { height: 0; }
+  .cat-btn {
+    background: var(--cinza-bg);
+    border: 2px solid var(--cinza-borda);
+    border-radius: 50px;
+    padding: 7px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: var(--texto);
+  }
+  .cat-btn:hover { border-color: var(--verde); color: var(--verde); }
+  .cat-btn.active { background: var(--verde); border-color: var(--verde); color: white; }
+
+  /* ── PRODUCTS GRID ── */
+  .products-wrap { padding: 12px; }
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
+  @media (min-width: 520px) { .products-grid { grid-template-columns: repeat(3, 1fr); } }
+  @media (min-width: 720px) { .products-grid { grid-template-columns: repeat(4, 1fr); } }
+
+  .product-card {
+    background: white;
+    border-radius: 14px;
+    box-shadow: var(--sombra-card);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    border: 1.5px solid var(--cinza-borda);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .product-card:hover { box-shadow: 0 6px 20px rgba(0,0,0,0.12); transform: translateY(-2px); }
+  .product-emoji {
+    background: var(--verde-claro);
+    text-align: center;
+    font-size: 40px;
+    padding: 20px 10px 14px;
+  }
+  .product-info { padding: 10px 12px 14px; flex: 1; display: flex; flex-direction: column; }
+  .product-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 13px; color: var(--texto); line-height: 1.3; }
+  .product-desc { font-size: 11px; color: var(--cinza-texto); margin-top: 4px; line-height: 1.4; flex: 1; }
+  .product-price { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 18px; color: var(--verde); margin-top: 8px; }
+  .add-btn {
+    background: var(--verde);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    padding: 8px 0;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 8px;
+    transition: background 0.2s, transform 0.1s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+  }
+  .add-btn:hover { background: var(--verde-escuro); }
+  .add-btn:active { transform: scale(0.97); }
+  .qty-ctrl {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: var(--verde-claro);
+    border-radius: 8px;
+    margin-top: 8px;
+    overflow: hidden;
+  }
+  .qty-btn {
+    background: var(--verde);
+    color: white;
+    border: none;
+    width: 36px; height: 34px;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.15s;
+  }
+  .qty-btn:hover { background: var(--verde-escuro); }
+  .qty-num { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; color: var(--verde-escuro); min-width: 28px; text-align: center; }
+
+  /* ── CART PAGE ── */
+  .cart-page { padding: 0 0 80px; }
+  .cart-header {
+    background: var(--verde);
+    color: white;
+    padding: 18px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .cart-empty {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--cinza-texto);
+  }
+  .cart-empty .icon { font-size: 64px; display: block; margin-bottom: 16px; }
+  .cart-item {
+    background: white;
+    border-bottom: 1px solid var(--cinza-borda);
+    padding: 14px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .ci-emoji { font-size: 30px; flex-shrink: 0; }
+  .ci-info { flex: 1; }
+  .ci-name { font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 14px; }
+  .ci-price { font-size: 12px; color: var(--cinza-texto); margin-top: 2px; }
+  .ci-subtotal { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 15px; color: var(--verde); margin-top: 2px; }
+  .ci-remove { background: none; border: none; font-size: 20px; cursor: pointer; color: var(--vermelho); padding: 4px; flex-shrink: 0; }
+
+  .cart-summary {
+    background: white;
+    margin: 12px;
+    border-radius: 14px;
+    border: 1.5px solid var(--cinza-borda);
+    overflow: hidden;
+  }
+  .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--cinza-borda);
+    font-size: 14px;
+  }
+  .summary-row:last-child { border-bottom: none; }
+  .summary-row.total {
+    background: var(--verde-claro);
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 18px;
+    color: var(--verde-escuro);
+  }
+  .delivery-note { padding: 12px 16px; font-size: 12px; color: var(--cinza-texto); background: var(--amarelo-claro); border-top: 1px solid #ffe082; display: flex; align-items: center; gap: 6px; }
+
+  .big-btn {
+    display: block;
+    width: calc(100% - 24px);
+    margin: 16px 12px 0;
+    background: var(--amarelo);
+    color: #1a1a1a;
+    border: none;
+    border-radius: 12px;
+    padding: 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 900;
+    font-size: 17px;
+    cursor: pointer;
+    text-align: center;
+    transition: background 0.2s, transform 0.1s;
+    box-shadow: 0 3px 12px rgba(245,168,0,0.3);
+  }
+  .big-btn:hover { background: #e09900; }
+  .big-btn:active { transform: scale(0.98); }
+  .big-btn.verde { background: var(--verde); color: white; box-shadow: 0 3px 12px rgba(26,122,46,0.3); }
+  .big-btn.verde:hover { background: var(--verde-escuro); }
+
+  .back-btn {
+    background: none;
+    border: none;
+    color: var(--cinza-texto);
+    font-size: 14px;
+    font-weight: 600;
+    padding: 12px 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Inter', sans-serif;
+  }
+  .back-btn:hover { color: var(--verde); }
+
+  /* ── CHECKOUT PAGE ── */
+  .checkout-page { padding: 0 0 80px; }
+  .form-section { background: white; margin: 12px; border-radius: 14px; border: 1.5px solid var(--cinza-borda); overflow: hidden; }
+  .form-section-title {
+    background: var(--verde);
+    color: white;
+    padding: 12px 16px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 800;
+    font-size: 15px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .form-group { padding: 14px 16px; border-bottom: 1px solid var(--cinza-borda); }
+  .form-group:last-child { border-bottom: none; }
+  label { display: block; font-weight: 600; font-size: 13px; color: var(--cinza-texto); margin-bottom: 6px; }
+  input[type="text"], input[type="tel"], textarea, select {
+    width: 100%;
+    border: 1.5px solid var(--cinza-borda);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 14px;
+    font-family: 'Inter', sans-serif;
+    color: var(--texto);
+    background: white;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input:focus, textarea:focus, select:focus { border-color: var(--verde); }
+  textarea { resize: vertical; min-height: 70px; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+  .payment-options { display: flex; flex-direction: column; gap: 8px; padding: 14px 16px; }
+  .pay-opt {
+    border: 2px solid var(--cinza-borda);
+    border-radius: 10px;
+    padding: 12px 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .pay-opt:hover { border-color: var(--verde); background: var(--verde-claro); }
+  .pay-opt.selected { border-color: var(--verde); background: var(--verde-claro); color: var(--verde-escuro); }
+  .pay-opt .pay-icon { font-size: 22px; flex-shrink: 0; }
+  .troco-field { padding: 12px 16px; border-top: 1px solid var(--cinza-borda); display: none; }
+  .troco-field.show { display: block; }
+
+  /* ── ORDER SUMMARY MINI ── */
+  .mini-pedido { background: var(--amarelo-claro); border: 1.5px solid #ffe082; border-radius: 14px; margin: 12px; padding: 14px 16px; }
+  .mini-pedido h3 { font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 14px; color: #7a5800; margin-bottom: 10px; }
+  .mini-item { display: flex; justify-content: space-between; font-size: 13px; padding: 3px 0; }
+  .mini-total { display: flex; justify-content: space-between; font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 16px; color: var(--verde-escuro); border-top: 1px solid #ffe082; margin-top: 8px; padding-top: 8px; }
+
+  /* ── CLIENTE SALVO ── */
+  .saved-badge {
+    background: var(--verde-claro);
+    border: 1.5px solid var(--verde);
+    border-radius: 10px;
+    padding: 10px 14px;
+    margin: 12px 12px 0;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    color: var(--verde-escuro);
+    font-weight: 600;
+  }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(80px);
+    background: var(--verde-escuro);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 50px;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    z-index: 999;
+    transition: transform 0.3s cubic-bezier(.4,2,.6,1);
+    white-space: nowrap;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  /* ── FLOAT CART BTN mobile ── */
+  .float-cart {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    z-index: 90;
+    display: none;
+  }
+  .float-cart.show { display: flex; }
+
+  .bottom-bar {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: white;
+    padding: 10px 16px;
+    border-top: 1px solid var(--cinza-borda);
+    box-shadow: 0 -2px 10px rgba(0,0,0,0.08);
+  }
+
+  /* horario banner */
+  .horario-bar {
+    background: var(--amarelo);
+    color: #1a1a1a;
+    text-align: center;
+    padding: 7px 16px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-top">
+    <div class="logo-area">
+      <span class="logo-patas">🐾</span>
+      <div class="logo-text">
+        <div class="brand">Casa de Ração Rocha</div>
+        <div class="sub">Disk Ração · Guaratinguetá/SP</div>
+      </div>
+    </div>
+    <button class="cart-btn" onclick="goToCart()">
+      🛒 <span id="cartLabel">Carrinho</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </div>
+  <div class="steps-bar">
+    <div class="step active" id="step1"><span class="step-num">1</span>Produtos</div>
+    <span class="step-sep">›</span>
+    <div class="step" id="step2"><span class="step-num">2</span>Carrinho</div>
+    <span class="step-sep">›</span>
+    <div class="step" id="step3"><span class="step-num">3</span>Finalizar</div>
+  </div>
+</header>
+
+<!-- ===== PAGE 1: LOJA ===== -->
+<div class="page active" id="pageLoja">
+  <div class="horario-bar">🕐 Seg–Sex: 8:30–19h &nbsp;|&nbsp; Sáb: 8:30–14h &nbsp;|&nbsp; 📦 Entrega mínima R$ 20,00</div>
+  <div class="hero">
+    <h1>🐶 Faça seu Pedido!</h1>
+    <p>Entregamos na região · Pedido mínimo R$ 20,00</p>
+    <div class="hero-info">
+      <div class="hero-badge"><strong>🛵 Delivery</strong>Taxa R$ 5,00</div>
+      <div class="hero-badge"><strong>💬 WhatsApp</strong>Pedido rápido</div>
+    </div>
+  </div>
+
+  <div class="cat-scroll" id="catScroll">
+    <button class="cat-btn active" onclick="filterCat('all', this)">🛍️ Todos</button>
+  </div>
+
+  <div class="products-wrap">
+    <div class="products-grid" id="productsGrid"></div>
+  </div>
+</div>
+
+<!-- ===== PAGE 2: CARRINHO ===== -->
+<div class="page" id="pageCart">
+  <div class="cart-header">🛒 Meu Carrinho</div>
+  <button class="back-btn" onclick="goToLoja()">← Continuar comprando</button>
+  <div id="cartItems"></div>
+  <div id="cartSummary"></div>
+</div>
+
+<!-- ===== PAGE 3: FINALIZAR ===== -->
+<div class="page" id="pageCheckout">
+  <div class="cart-header" style="background:var(--verde-escuro)">📋 Finalizar Pedido</div>
+  <button class="back-btn" onclick="goToCart()">← Voltar ao carrinho</button>
+
+  <div id="savedBadge" style="display:none" class="saved-badge">
+    ✅ Dados preenchidos automaticamente! Confira abaixo.
+  </div>
+
+  <!-- RESUMO MINI -->
+  <div class="mini-pedido">
+    <h3>📦 Resumo do Pedido</h3>
+    <div id="miniItems"></div>
+    <div class="mini-total"><span>Total com entrega</span><span id="miniTotal">R$ 0,00</span></div>
+  </div>
+
+  <!-- DADOS PESSOAIS -->
+  <div class="form-section">
+    <div class="form-section-title">👤 Seus Dados</div>
+    <div class="form-group">
+      <label>Nome completo *</label>
+      <input type="text" id="fNome" placeholder="Seu nome" />
+    </div>
+    <div class="form-group">
+      <label>WhatsApp *</label>
+      <input type="tel" id="fTelefone" placeholder="(12) 9 9999-9999" />
+    </div>
+  </div>
+
+  <!-- ENDEREÇO -->
+  <div class="form-section">
+    <div class="form-section-title">📍 Endereço de Entrega</div>
+    <div class="form-group">
+      <label>Rua / Avenida *</label>
+      <input type="text" id="fRua" placeholder="Nome da rua" />
+    </div>
+    <div class="form-group">
+      <div class="row2">
+        <div>
+          <label>Número *</label>
+          <input type="text" id="fNumero" placeholder="Ex: 123" />
+        </div>
+        <div>
+          <label>Bairro *</label>
+          <input type="text" id="fBairro" placeholder="Seu bairro" />
+        </div>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Ponto de referência</label>
+      <input type="text" id="fReferencia" placeholder="Ex: Próximo à padaria" />
+    </div>
+  </div>
+
+  <!-- PAGAMENTO -->
+  <div class="form-section">
+    <div class="form-section-title">💳 Forma de Pagamento</div>
+    <div class="payment-options" id="payOpts">
+      <div class="pay-opt" onclick="selectPay('pix', this)">
+        <span class="pay-icon">💚</span>
+        <div>
+          <div>PIX</div>
+          <div style="font-size:11px;color:var(--cinza-texto);font-weight:400">Pague via PIX</div>
+        </div>
+      </div>
+      <div class="pay-opt" onclick="selectPay('cartao_debito', this)">
+        <span class="pay-icon">💳</span>
+        <div>
+          <div>Cartão de Débito</div>
+          <div style="font-size:11px;color:var(--cinza-texto);font-weight:400">Maquininha na entrega</div>
+        </div>
+      </div>
+      <div class="pay-opt" onclick="selectPay('cartao_credito', this)">
+        <span class="pay-icon">💳</span>
+        <div>
+          <div>Cartão de Crédito</div>
+          <div style="font-size:11px;color:var(--cinza-texto);font-weight:400">Maquininha na entrega</div>
+        </div>
+      </div>
+      <div class="pay-opt" onclick="selectPay('dinheiro', this)">
+        <span class="pay-icon">💵</span>
+        <div>
+          <div>Dinheiro</div>
+          <div style="font-size:11px;color:var(--cinza-texto);font-weight:400">Pagar na entrega</div>
+        </div>
+      </div>
+    </div>
+    <div class="troco-field" id="trocoField">
+      <label>Troco para quanto? *</label>
+      <input type="text" id="fTroco" placeholder="Ex: R$ 50,00" />
+    </div>
+  </div>
+
+  <div class="form-group" style="padding:0 12px 12px;">
+    <label style="padding:0 4px 6px;display:block;font-weight:600;font-size:13px;color:var(--cinza-texto)">Observações (opcional)</label>
+    <textarea id="fObs" placeholder="Alguma observação para o pedido?"></textarea>
+  </div>
+
+  <div class="bottom-bar">
+    <button class="big-btn verde" onclick="finalizarPedido()">
+      📲 Enviar pedido pelo WhatsApp
+    </button>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ══════════════════════════════════════════
+//  ESTADO GLOBAL
+// ══════════════════════════════════════════
+let catalog = null;
+let cart = {}; // { id: qty }
+let selectedPayment = '';
+const WHATSAPP = '5512997503412';
+
+// ══════════════════════════════════════════
+//  LOAD CATALOG (JSON)
+// ══════════════════════════════════════════
+async function loadCatalog() {
+  try {
+    const res = await fetch('produtos.json');
+    catalog = await res.json();
+  } catch (e) {
+    // Fallback embutido caso o JSON não carregue (quando aberto sem servidor)
+    catalog = {
+      loja: {
+        nome: "Casa de Ração Rocha",
+        taxaEntrega: 5.00,
+        pedidoMinimo: 20.00,
+        whatsapp: "5512997503412"
+      },
+      categorias: [
+        { id: "cachorros", nome: "Cachorros", icone: "🐕" },
+        { id: "gatos", nome: "Gatos", icone: "🐈" },
+        { id: "passaros", nome: "Pássaros", icone: "🦜" },
+        { id: "medicamentos", nome: "Medicamentos", icone: "💊" },
+        { id: "acessorios", nome: "Acessórios", icone: "🎾" }
+      ],
+      produtos: [
+        { id:"p001", categoria:"cachorros", nome:"Ração Premium Adulto 15kg", descricao:"Ração completa para cães adultos", preco:89.90, disponivel:true },
+        { id:"p002", categoria:"cachorros", nome:"Ração Premium Filhote 10kg", descricao:"Ração especial para filhotes", preco:75.00, disponivel:true },
+        { id:"p003", categoria:"cachorros", nome:"Ração Super Premium 20kg", descricao:"Alta qualidade com frango", preco:149.90, disponivel:true },
+        { id:"p004", categoria:"cachorros", nome:"Ração Adulto Médio Porte 3kg", descricao:"Ideal para cães de médio porte", preco:32.00, disponivel:true },
+        { id:"p005", categoria:"gatos", nome:"Ração Gatos Adultos 3kg", descricao:"Ração completa para gatos adultos", preco:45.00, disponivel:true },
+        { id:"p006", categoria:"gatos", nome:"Ração Gatos Filhotes 1kg", descricao:"Para gatinhos em crescimento", preco:28.00, disponivel:true },
+        { id:"p007", categoria:"gatos", nome:"Ração Gatos Castrados 3kg", descricao:"Controle de peso", preco:52.00, disponivel:true },
+        { id:"p008", categoria:"passaros", nome:"Mistura Periquito 500g", descricao:"Sementes selecionadas", preco:12.00, disponivel:true },
+        { id:"p009", categoria:"passaros", nome:"Ração Canário 500g", descricao:"Alimento balanceado", preco:14.00, disponivel:true },
+        { id:"p010", categoria:"medicamentos", nome:"Antipulgas e Carrapatos", descricao:"Proteção por 3 meses", preco:35.00, disponivel:true },
+        { id:"p011", categoria:"medicamentos", nome:"Vermífugo para Cães", descricao:"Tratamento antiparasitário", preco:22.00, disponivel:true },
+        { id:"p012", categoria:"acessorios", nome:"Coleira Ajustável P/M", descricao:"Coleira resistente", preco:18.00, disponivel:true },
+        { id:"p013", categoria:"acessorios", nome:"Brinquedo Mordedor", descricao:"Borracha resistente", preco:15.00, disponivel:true },
+        { id:"p014", categoria:"acessorios", nome:"Comedouro Inox 500ml", descricao:"Fácil higienização", preco:25.00, disponivel:true },
+        { id:"p015", categoria:"acessorios", nome:"Cama Pet Tamanho M", descricao:"Confortável para cães e gatos", preco:69.90, disponivel:true }
+      ]
+    };
+  }
+  buildCategories();
+  renderProducts('all');
+  loadSavedClient();
+}
+
+// ══════════════════════════════════════════
+//  EMOJIS POR CATEGORIA
+// ══════════════════════════════════════════
+function getEmoji(catId) {
+  const map = { cachorros:'🐕', gatos:'🐈', passaros:'🦜', medicamentos:'💊', acessorios:'🎾' };
+  return map[catId] || '📦';
+}
+
+// ══════════════════════════════════════════
+//  BUILD CATEGORIES SCROLL
+// ══════════════════════════════════════════
+function buildCategories() {
+  const scroll = document.getElementById('catScroll');
+  catalog.categorias.forEach(c => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn';
+    btn.textContent = c.icone + ' ' + c.nome;
+    btn.onclick = function() { filterCat(c.id, this); };
+    scroll.appendChild(btn);
+  });
+}
+
+// ══════════════════════════════════════════
+//  RENDER PRODUCTS
+// ══════════════════════════════════════════
+function renderProducts(catId) {
+  const grid = document.getElementById('productsGrid');
+  grid.innerHTML = '';
+  const list = catId === 'all'
+    ? catalog.produtos.filter(p => p.disponivel)
+    : catalog.produtos.filter(p => p.categoria === catId && p.disponivel);
+
+  list.forEach(p => {
+    const qty = cart[p.id] || 0;
+    const card = document.createElement('div');
+    card.className = 'product-card';
+    card.innerHTML = `
+      <div class="product-emoji">${getEmoji(p.categoria)}</div>
+      <div class="product-info">
+        <div class="product-name">${p.nome}</div>
+        <div class="product-desc">${p.descricao}</div>
+        <div class="product-price">R$ ${p.preco.toFixed(2).replace('.',',')}</div>
+        <div id="ctrl_${p.id}">
+          ${qty === 0
+            ? `<button class="add-btn" onclick="addToCart('${p.id}')">➕ Adicionar</button>`
+            : `<div class="qty-ctrl">
+                <button class="qty-btn" onclick="changeQty('${p.id}',-1)">−</button>
+                <span class="qty-num">${qty}</span>
+                <button class="qty-btn" onclick="changeQty('${p.id}',1)">+</button>
+               </div>`
+          }
+        </div>
+      </div>`;
+    grid.appendChild(card);
+  });
+}
+
+function filterCat(catId, btn) {
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  renderProducts(catId);
+}
+
+// ══════════════════════════════════════════
+//  CART LOGIC
+// ══════════════════════════════════════════
+function addToCart(id) {
+  cart[id] = 1;
+  updateCartUI();
+  renderProductCtrl(id);
+  showToast('✅ Adicionado ao carrinho!');
+}
+
+function changeQty(id, delta) {
+  cart[id] = (cart[id] || 0) + delta;
+  if (cart[id] <= 0) delete cart[id];
+  updateCartUI();
+  renderProductCtrl(id);
+}
+
+function renderProductCtrl(id) {
+  const el = document.getElementById('ctrl_' + id);
+  if (!el) return;
+  const qty = cart[id] || 0;
+  if (qty === 0) {
+    el.innerHTML = `<button class="add-btn" onclick="addToCart('${id}')">➕ Adicionar</button>`;
+  } else {
+    el.innerHTML = `<div class="qty-ctrl">
+      <button class="qty-btn" onclick="changeQty('${id}',-1)">−</button>
+      <span class="qty-num">${qty}</span>
+      <button class="qty-btn" onclick="changeQty('${id}',1)">+</button>
+    </div>`;
+  }
+}
+
+function cartTotal() {
+  return Object.entries(cart).reduce((sum, [id, qty]) => {
+    const p = catalog.produtos.find(x => x.id === id);
+    return sum + (p ? p.preco * qty : 0);
+  }, 0);
+}
+
+function cartQty() {
+  return Object.values(cart).reduce((a,b) => a+b, 0);
+}
+
+function updateCartUI() {
+  const qty = cartQty();
+  document.getElementById('cartCount').textContent = qty;
+  document.getElementById('cartLabel').textContent = qty > 0 ? `(${qty})` : 'Carrinho';
+}
+
+// ══════════════════════════════════════════
+//  PAGES NAVIGATION
+// ══════════════════════════════════════════
+function showPage(pageId) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.getElementById(pageId).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function setStep(n) {
+  for(let i=1;i<=3;i++) {
+    const el = document.getElementById('step'+i);
+    el.classList.remove('active','done');
+    if(i < n) el.classList.add('done');
+    else if(i === n) el.classList.add('active');
+  }
+}
+
+function goToLoja() { showPage('pageLoja'); setStep(1); }
+
+function goToCart() {
+  if (cartQty() === 0) { showToast('🛒 Seu carrinho está vazio!'); return; }
+  renderCart();
+  showPage('pageCart');
+  setStep(2);
+}
+
+function goToCheckout() {
+  if (cartQty() === 0) { showToast('🛒 Seu carrinho está vazio!'); return; }
+  renderMiniPedido();
+  showPage('pageCheckout');
+  setStep(3);
+}
+
+// ══════════════════════════════════════════
+//  RENDER CART
+// ══════════════════════════════════════════
+function renderCart() {
+  const taxa = catalog.loja.taxaEntrega;
+  const subtotal = cartTotal();
+  const total = subtotal + taxa;
+  const items = document.getElementById('cartItems');
+  const summary = document.getElementById('cartSummary');
+
+  if (cartQty() === 0) {
+    items.innerHTML = `<div class="cart-empty"><span class="icon">🛒</span><p>Seu carrinho está vazio</p></div>`;
+    summary.innerHTML = '';
+    return;
+  }
+
+  let html = '';
+  Object.entries(cart).forEach(([id, qty]) => {
+    const p = catalog.produtos.find(x => x.id === id);
+    if (!p) return;
+    const sub = p.preco * qty;
+    html += `<div class="cart-item">
+      <span class="ci-emoji">${getEmoji(p.categoria)}</span>
+      <div class="ci-info">
+        <div class="ci-name">${p.nome}</div>
+        <div class="ci-price">R$ ${p.preco.toFixed(2).replace('.',',')} × ${qty}</div>
+        <div class="ci-subtotal">R$ ${sub.toFixed(2).replace('.',',')}</div>
+      </div>
+      <div class="qty-ctrl" style="min-width:100px">
+        <button class="qty-btn" onclick="cartChangeQty('${id}',-1)">−</button>
+        <span class="qty-num">${qty}</span>
+        <button class="qty-btn" onclick="cartChangeQty('${id}',1)">+</button>
+      </div>
+    </div>`;
+  });
+  items.innerHTML = html;
+
+  summary.innerHTML = `
+    <div class="cart-summary">
+      <div class="summary-row"><span>Subtotal</span><span>R$ ${subtotal.toFixed(2).replace('.',',')}</span></div>
+      <div class="summary-row"><span>🛵 Taxa de entrega</span><span>R$ ${taxa.toFixed(2).replace('.',',')}</span></div>
+      <div class="summary-row total"><span>💰 Total</span><span>R$ ${total.toFixed(2).replace('.',',')}</span></div>
+      <div class="delivery-note">ℹ️ Pedido mínimo R$ ${catalog.loja.pedidoMinimo.toFixed(2).replace('.',',')} · Entregamos na região</div>
+    </div>
+    <button class="big-btn" onclick="goToCheckout()">Avançar para Finalizar →</button>
+    <div style="height:16px"></div>`;
+}
+
+function cartChangeQty(id, delta) {
+  changeQty(id, delta);
+  renderCart();
+}
+
+// ══════════════════════════════════════════
+//  CHECKOUT
+// ══════════════════════════════════════════
+function renderMiniPedido() {
+  const taxa = catalog.loja.taxaEntrega;
+  const subtotal = cartTotal();
+  const total = subtotal + taxa;
+  let html = '';
+  Object.entries(cart).forEach(([id, qty]) => {
+    const p = catalog.produtos.find(x => x.id === id);
+    if (!p) return;
+    html += `<div class="mini-item"><span>${p.nome} ×${qty}</span><span>R$ ${(p.preco*qty).toFixed(2).replace('.',',')}</span></div>`;
+  });
+  document.getElementById('miniItems').innerHTML = html;
+  document.getElementById('miniTotal').textContent = 'R$ ' + total.toFixed(2).replace('.',',');
+}
+
+function selectPay(type, el) {
+  document.querySelectorAll('.pay-opt').forEach(e => e.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedPayment = type;
+  document.getElementById('trocoField').classList.toggle('show', type === 'dinheiro');
+}
+
+// ══════════════════════════════════════════
+//  SALVAR / CARREGAR CLIENTE
+// ══════════════════════════════════════════
+function saveClient() {
+  const data = {
+    nome: document.getElementById('fNome').value,
+    telefone: document.getElementById('fTelefone').value,
+    rua: document.getElementById('fRua').value,
+    numero: document.getElementById('fNumero').value,
+    bairro: document.getElementById('fBairro').value,
+    referencia: document.getElementById('fReferencia').value
+  };
+  localStorage.setItem('racao_rocha_cliente', JSON.stringify(data));
+}
+
+function loadSavedClient() {
+  try {
+    const saved = localStorage.getItem('racao_rocha_cliente');
+    if (!saved) return;
+    const d = JSON.parse(saved);
+    const fields = ['nome','telefone','rua','numero','bairro','referencia'];
+    let hasData = false;
+    fields.forEach(f => {
+      const el = document.getElementById('f' + f.charAt(0).toUpperCase() + f.slice(1));
+      if (el && d[f]) { el.value = d[f]; hasData = true; }
+    });
+    if (hasData) {
+      const badge = document.getElementById('savedBadge');
+      if (badge) badge.style.display = 'flex';
+    }
+  } catch(e) {}
+}
+
+// ══════════════════════════════════════════
+//  FINALIZAR PEDIDO → WHATSAPP
+// ══════════════════════════════════════════
+function finalizarPedido() {
+  const nome = document.getElementById('fNome').value.trim();
+  const tel = document.getElementById('fTelefone').value.trim();
+  const rua = document.getElementById('fRua').value.trim();
+  const numero = document.getElementById('fNumero').value.trim();
+  const bairro = document.getElementById('fBairro').value.trim();
+  const ref = document.getElementById('fReferencia').value.trim();
+  const obs = document.getElementById('fObs').value.trim();
+  const troco = document.getElementById('fTroco').value.trim();
+
+  if (!nome) { showToast('⚠️ Informe seu nome!'); return; }
+  if (!tel) { showToast('⚠️ Informe seu WhatsApp!'); return; }
+  if (!rua || !numero || !bairro) { showToast('⚠️ Preencha seu endereço completo!'); return; }
+  if (!selectedPayment) { showToast('⚠️ Escolha a forma de pagamento!'); return; }
+  if (selectedPayment === 'dinheiro' && !troco) { showToast('⚠️ Informe o valor para troco!'); return; }
+
+  const taxa = catalog.loja.taxaEntrega;
+  const subtotal = cartTotal();
+  const total = subtotal + taxa;
+
+  if (subtotal < catalog.loja.pedidoMinimo) {
+    showToast(`⚠️ Pedido mínimo R$ ${catalog.loja.pedidoMinimo.toFixed(2).replace('.',',')}!`);
+    return;
+  }
+
+  saveClient();
+
+  const payLabels = {
+    pix: '💚 PIX',
+    cartao_debito: '💳 Cartão de Débito',
+    cartao_credito: '💳 Cartão de Crédito',
+    dinheiro: '💵 Dinheiro'
+  };
+
+  let msg = `🐾 *PEDIDO - Casa de Ração Rocha*\n`;
+  msg += `━━━━━━━━━━━━━━━━━━━━\n\n`;
+  msg += `👤 *Cliente:* ${nome}\n`;
+  msg += `📱 *WhatsApp:* ${tel}\n\n`;
+  msg += `📍 *Endereço de Entrega:*\n`;
+  msg += `${rua}, nº ${numero} - ${bairro}\n`;
+  if (ref) msg += `Referência: ${ref}\n`;
+  msg += `\n📦 *Itens do Pedido:*\n`;
+
+  Object.entries(cart).forEach(([id, qty]) => {
+    const p = catalog.produtos.find(x => x.id === id);
+    if (!p) return;
+    msg += `• ${p.nome} ×${qty} → R$ ${(p.preco*qty).toFixed(2).replace('.',',')}\n`;
+  });
+
+  msg += `\n💰 *Subtotal:* R$ ${subtotal.toFixed(2).replace('.',',')}\n`;
+  msg += `🛵 *Taxa entrega:* R$ ${taxa.toFixed(2).replace('.',',')}\n`;
+  msg += `✅ *TOTAL: R$ ${total.toFixed(2).replace('.',',')}*\n\n`;
+  msg += `💳 *Pagamento:* ${payLabels[selectedPayment]}`;
+  if (selectedPayment === 'dinheiro' && troco) msg += ` (troco p/ ${troco})`;
+  msg += `\n`;
+  if (obs) msg += `\n📝 *Obs:* ${obs}\n`;
+  msg += `\n_Pedido feito pelo site_ 🌐`;
+
+  const encoded = encodeURIComponent(msg);
+  const wa = catalog.loja.whatsapp || WHATSAPP;
+  window.open(`https://wa.me/${wa}?text=${encoded}`, '_blank');
+}
+
+// ══════════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════════
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2200);
+}
+
+// ══════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════
+loadCatalog();
+</script>
+</body>
+</html>
